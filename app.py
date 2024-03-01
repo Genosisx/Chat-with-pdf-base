@@ -1,8 +1,12 @@
 from flask import Flask, render_template, request, redirect, session
 import requests
-
+import os
+from dotenv import load_dotenv
+import io
+load_dotenv()
+API_KEY=os.getenv("API_KEY")
 app = Flask(__name__)
-app.secret_key = 'sec_oixDgaiu41gif64dTAXyYgaZaw3XscVS'  
+app.secret_key = API_KEY 
 
 @app.route('/')
 def index():
@@ -16,7 +20,7 @@ def upload_file():
         return 'No selected file'
     
     files = {'file': ('file.pdf', file.stream, 'application/octet-stream')}
-    headers = {'x-api-key': 'sec_oixDgaiu41gif64dTAXyYgaZaw3XscVS'}  
+    headers = {'x-api-key': API_KEY}  
     response = requests.post('https://api.chatpdf.com/v1/sources/add-file', headers=headers, files=files)
     
     if response.status_code == 200:
@@ -44,7 +48,8 @@ def send_message():
         "messages": [
             {
                 "role": "user",
-                "content": "give a summarized report of this pdf with potential QA and key topics. Provide video link of the video. Please keep the response more human like and give output in points ",  # Get message from form data
+                "content": "give a summarized json value of the key components of this pdf extract data in this manner id	status	tag	fieldName extract all the codes and description like eg code 52A issuing bank  "
+# Get message from form data
             },
         ],
     }
